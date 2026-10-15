@@ -27,7 +27,7 @@ jobs:
       - name: Reject unresolved high or critical vulnerabilities
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasec/trivy:0.67.2 image --ignore-unfixed --scanners vuln \
+            aquasec/trivy:0.67.2 image --scanners vuln \
             --severity HIGH,CRITICAL --exit-code 1 \
             quikdb-template-${{ matrix.template }}:acceptance
       - name: Verify health marker as a non-customer fixture

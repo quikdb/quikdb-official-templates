@@ -10,4 +10,4 @@ COPY --chown=quikdb:quikdb . .
 USER quikdb
 EXPOSE 8000
 HEALTHCHECK --interval=20s --timeout=3s --start-period=10s CMD python -c "import urllib.request; assert b'quikdb-template-django-web-v1' in urllib.request.urlopen('http://127.0.0.1:8000/health').read()"
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "2", "starter.wsgi:application"]
+CMD ["gunicorn", "--preload", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "2", "starter.wsgi:application"]
