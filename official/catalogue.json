@@ -49,7 +49,7 @@
     },
     {
       "id": "python-flask", "name": "Flask API", "description": "A Flask API served by Gunicorn.",
-      "version": "1.0.0", "path": "official/python-flask", "runtime": "Python 3.14 / Flask 3 / Gunicorn",
+      "version": "1.0.0", "path": "official/python-flask", "runtime": "Python 3 / Flask 3 / Gunicorn",
       "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "gunicorn --bind 0.0.0.0:5000 --workers 2 --threads 2 app:app", "port": 5000, "internalPort": 5000 },
       "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
       "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
@@ -60,7 +60,7 @@
     },
     {
       "id": "django-web", "name": "Django web application", "description": "A minimal Django application served by Gunicorn.",
-      "version": "1.0.0", "path": "official/django-web", "runtime": "Python 3.14 / Django 6 / Gunicorn",
+      "version": "1.0.0", "path": "official/django-web", "runtime": "Python 3 / Django 6 / Gunicorn",
       "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "gunicorn --preload --bind 0.0.0.0:8000 --workers 2 --threads 2 starter.wsgi:application", "port": 8000, "internalPort": 8000 },
       "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [{ "name": "SECRET_KEY", "secret": true, "purpose": "Set a persistent Django signing key before storing sessions or signed data." }] },
       "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
