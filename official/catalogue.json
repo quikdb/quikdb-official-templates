@@ -1,11 +1,73 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "publisher": { "id": "quikdb", "name": "QuikDB", "verified": true },
+  "license": "MIT",
   "templates": [
-    { "id": "nextjs-web", "version": "1.0.0", "path": "official/nextjs-web", "port": 3000, "healthMarker": "quikdb-template-nextjs-web-v1" },
-    { "id": "react-vite", "version": "1.0.0", "path": "official/react-vite", "port": 8080, "healthMarker": "quikdb-template-react-vite-v1" },
-    { "id": "express-api", "version": "1.0.0", "path": "official/express-api", "port": 3000, "healthMarker": "quikdb-template-express-api-v1" },
-    { "id": "node-api", "version": "1.0.0", "path": "official/node-api", "port": 3000, "healthMarker": "quikdb-template-node-api-v1" },
-    { "id": "python-flask", "version": "1.0.0", "path": "official/python-flask", "port": 5000, "healthMarker": "quikdb-template-python-flask-v1" },
-    { "id": "django-web", "version": "1.0.0", "path": "official/django-web", "port": 8000, "healthMarker": "quikdb-template-django-web-v1" }
+    {
+      "id": "nextjs-web", "name": "Next.js web application", "description": "A production-ready Next.js application with a health endpoint.",
+      "version": "1.0.0", "path": "official/nextjs-web", "runtime": "Node.js 24 / Next.js 16",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "node server.js", "port": 3000, "internalPort": 3000 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-nextjs-web-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["server-rendered web application", "container health check", "production standalone build"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    },
+    {
+      "id": "react-vite", "name": "React static site", "description": "A React and Vite site served by unprivileged Nginx.",
+      "version": "1.0.0", "path": "official/react-vite", "runtime": "Node.js 24 / Vite 8 / Nginx",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "nginx foreground process", "port": 8080, "internalPort": 8080 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-react-vite-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["static React application", "unprivileged Nginx runtime", "container health check"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    },
+    {
+      "id": "express-api", "name": "Express API", "description": "A small production Express API with JSON health checks.",
+      "version": "1.0.0", "path": "official/express-api", "runtime": "Node.js 24 / Express 5",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "node server.js", "port": 3000, "internalPort": 3000 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-express-api-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["JSON API", "Express request handling", "container health check"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    },
+    {
+      "id": "node-api", "name": "Node.js API", "description": "A dependency-free Node.js HTTP API.",
+      "version": "1.0.0", "path": "official/node-api", "runtime": "Node.js 24",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "node server.js", "port": 3000, "internalPort": 3000 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-node-api-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["dependency-free JSON API", "Node.js HTTP server", "container health check"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    },
+    {
+      "id": "python-flask", "name": "Flask API", "description": "A Flask API served by Gunicorn.",
+      "version": "1.0.0", "path": "official/python-flask", "runtime": "Python 3.14 / Flask 3 / Gunicorn",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "gunicorn --bind 0.0.0.0:5000 --workers 2 --threads 2 app:app", "port": 5000, "internalPort": 5000 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-python-flask-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["JSON API", "Gunicorn production server", "container health check"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    },
+    {
+      "id": "django-web", "name": "Django web application", "description": "A minimal Django application served by Gunicorn.",
+      "version": "1.0.0", "path": "official/django-web", "runtime": "Python 3.14 / Django 6 / Gunicorn",
+      "configuration": { "configSource": "dockerfile", "buildStrategy": "dockerfile", "buildCommand": "docker build -f Dockerfile .", "startCommand": "gunicorn --preload --bind 0.0.0.0:8000 --workers 2 --threads 2 starter.wsgi:application", "port": 8000, "internalPort": 8000 },
+      "requirements": { "customerRepositoryRequired": false, "requiredEnvironmentVariables": [], "optionalEnvironmentVariables": [{ "name": "SECRET_KEY", "secret": true, "purpose": "Set a persistent Django signing key before storing sessions or signed data." }] },
+      "resourceEstimate": { "cpuCores": 0.25, "ramMb": 256, "storageMb": 512, "replicaCount": 1 },
+      "health": { "path": "/health", "marker": "quikdb-template-django-web-v1" },
+      "compatibility": { "state": "compatible", "operatingSystem": "linux", "architectures": ["amd64"], "deploymentMode": "container", "sourceType": "git" },
+      "features": ["Django web application", "Gunicorn production server", "container health check"],
+      "support": { "status": "supported", "channel": "QuikDB Help" }
+    }
   ]
 }
