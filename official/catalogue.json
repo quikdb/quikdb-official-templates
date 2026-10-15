@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "templates": [
+    { "id": "nextjs-web", "version": "1.0.0", "path": "official/nextjs-web", "port": 3000, "healthMarker": "quikdb-template-nextjs-web-v1" },
+    { "id": "react-vite", "version": "1.0.0", "path": "official/react-vite", "port": 8080, "healthMarker": "quikdb-template-react-vite-v1" },
+    { "id": "express-api", "version": "1.0.0", "path": "official/express-api", "port": 3000, "healthMarker": "quikdb-template-express-api-v1" },
+    { "id": "node-api", "version": "1.0.0", "path": "official/node-api", "port": 3000, "healthMarker": "quikdb-template-node-api-v1" },
+    { "id": "python-flask", "version": "1.0.0", "path": "official/python-flask", "port": 5000, "healthMarker": "quikdb-template-python-flask-v1" },
+    { "id": "django-web", "version": "1.0.0", "path": "official/django-web", "port": 8000, "healthMarker": "quikdb-template-django-web-v1" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "quikdb-template-nextjs-web",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": { "build": "next build", "start": "next start" },
+  "dependencies": { "next": "16.4.1", "react": "19.3.1", "react-dom": "19.3.1" }
+}

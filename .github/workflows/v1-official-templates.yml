@@ -1,0 +1,49 @@
+name: V1 official template sources
+
+on:
+  pull_request:
+    paths:
+      - 'official/**'
+      - 'scripts/validate-official.js'
+      - '.github/workflows/v1-official-templates.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: arc-runner-set
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [nextjs-web, react-vite, express-api, node-api, python-flask, django-web]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate catalogue contract
+        run: node scripts/validate-official.js
+      - name: Build exact template container
+        run: docker build --pull -t quikdb-template-${{ matrix.template }}:acceptance official/${{ matrix.template }}
+      - name: Reject unresolved high or critical vulnerabilities
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.67.2 image --ignore-unfixed --scanners vuln \
+            --severity HIGH,CRITICAL --exit-code 1 \
+            quikdb-template-${{ matrix.template }}:acceptance
+      - name: Verify health marker as a non-customer fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          id="quikdb-template-${{ matrix.template }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          port="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(String(c.templates.find(t=>t.id==='${{ matrix.template }}').port))")"
+          marker="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(c.templates.find(t=>t.id==='${{ matrix.template }}').healthMarker)")"
+          trap 'docker rm -f "$id" >/dev/null 2>&1 || true; docker image rm quikdb-template-${{ matrix.template }}:acceptance >/dev/null 2>&1 || true' EXIT
+          docker run -d --name "$id" -p 127.0.0.1::"$port" quikdb-template-${{ matrix.template }}:acceptance
+          host_port="$(docker port "$id" "$port/tcp" | sed 's/.*://')"
+          for attempt in $(seq 1 30); do
+            body="$(curl -fsS "http://127.0.0.1:${host_port}/health" || true)"
+            if grep -Fq "$marker" <<<"$body"; then exit 0; fi
+            sleep 2
+          done
+          docker logs "$id"
+          exit 1
