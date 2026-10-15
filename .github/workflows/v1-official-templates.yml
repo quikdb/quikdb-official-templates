@@ -35,8 +35,8 @@ jobs:
         run: |
           set -euo pipefail
           id="quikdb-template-${{ matrix.template }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          port="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(String(c.templates.find(t=>t.id==='${{ matrix.template }}').port))")"
-          marker="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(c.templates.find(t=>t.id==='${{ matrix.template }}').healthMarker)")"
+          port="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(String(c.templates.find(t=>t.id==='${{ matrix.template }}').configuration.port))")"
+          marker="$(node -e "const c=require('./official/catalogue.json'); process.stdout.write(c.templates.find(t=>t.id==='${{ matrix.template }}').health.marker)")"
           trap 'docker rm -f "$id" >/dev/null 2>&1 || true; docker image rm quikdb-template-${{ matrix.template }}:acceptance >/dev/null 2>&1 || true' EXIT
           docker run -d --name "$id" -p 127.0.0.1::"$port" quikdb-template-${{ matrix.template }}:acceptance
           host_port="$(docker port "$id" "$port/tcp" | sed 's/.*://')"
